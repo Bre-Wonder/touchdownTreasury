@@ -13,54 +13,47 @@ const ProductGrid: React.FC = () => {
   const products: Product[] = [
     {
       id: 1,
-      name: 'Vintage Football Jersey',
+      name: 'Mark - The Commissioner',
       price: '$89.00',
       image: '🏈',
       category: 'Apparel'
     },
     {
       id: 2,
-      name: 'Championship Ring Replica',
+      name: 'Jerald',
       price: '$149.00',
       image: '💍',
       category: 'Collectibles'
     },
     {
       id: 3,
-      name: 'Team Cap Collection',
+      name: 'David',
       price: '$34.00',
       image: '🧢',
       category: 'Accessories'
     },
     {
       id: 4,
-      name: 'Signed Football',
+      name: 'Rich',
       price: '$299.00',
       image: '🏈',
       category: 'Collectibles'
     },
     {
       id: 5,
-      name: 'Premium Hoodie',
+      name: 'Eric',
       price: '$79.00',
       image: '👕',
       category: 'Apparel'
     },
-    {
-      id: 6,
-      name: 'Game Day Mug',
-      price: '$24.00',
-      image: '☕',
-      category: 'Accessories'
-    }
   ];
 
   return (
     <section className="product-section" id="products">
       <div className="product-container">
         <div className="section-header">
-          <h2>Featured Products</h2>
-          <p>Discover our exclusive collection of football memorabilia</p>
+          <h2>Roster</h2>
+          <p>Take a Look at What Teams Each Player Has</p>
         </div>
 
         <div className="product-grid">
@@ -76,7 +69,7 @@ const ProductGrid: React.FC = () => {
                 <span className="product-category">{product.category}</span>
                 <h3 className="product-name">{product.name}</h3>
                 <p className="product-price">{product.price}</p>
-                <button className="add-to-cart-btn">Add to Cart</button>
+                <button className="add-to-cart-btn">View Teams</button>
               </div>
             </div>
           ))}
