@@ -27,7 +27,7 @@ const Header: React.FC = () => {
 
         <nav className={`header-nav ${menuOpen ? 'active' : ''}`}>
           <ul className="nav-list">
-            <li><a href="#home">HOME</a></li>
+            <li><a href="#home">LEADERBOARD</a></li>
             <li><a href="#new">DRAFT</a></li>
             <li><a href="#products">PLAYOFFS</a></li>
             <li><a href="#merch">EXTRA</a></li>
