@@ -1,52 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ProductGrid.css';
+import TeamsModal from './TeamsModal';
 
 interface Product {
   id: number;
   name: string;
-  price: string;
+  wins: number;
   image: string;
   category: string;
 }
 
 const ProductGrid: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState('');
   const products: Product[] = [
     {
       id: 1,
       name: 'Mark - The Commissioner',
-      price: '$89.00',
+      wins: 12,
       image: '🏈',
       category: 'Apparel'
     },
     {
       id: 2,
       name: 'Jerald',
-      price: '$149.00',
+      wins: 8,
       image: '💍',
       category: 'Collectibles'
     },
     {
       id: 3,
       name: 'David',
-      price: '$34.00',
+      wins: 15,
       image: '🧢',
       category: 'Accessories'
     },
     {
       id: 4,
       name: 'Rich',
-      price: '$299.00',
+      wins: 6,
       image: '🏈',
       category: 'Collectibles'
     },
     {
       id: 5,
       name: 'Eric',
-      price: '$79.00',
+      wins: 10,
       image: '👕',
       category: 'Apparel'
     },
   ];
+
+  const handleViewTeams = (playerName: string) => {
+    setSelectedPlayer(playerName);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedPlayer('');
+  };
 
   return (
     <section className="product-section" id="products">
@@ -68,8 +81,13 @@ const ProductGrid: React.FC = () => {
               <div className="product-info">
                 <span className="product-category">{product.category}</span>
                 <h3 className="product-name">{product.name}</h3>
-                <p className="product-price">{product.price}</p>
-                <button className="add-to-cart-btn">View Teams</button>
+                <p className="product-price">{product.wins} Wins</p>
+                <button 
+                  className="add-to-cart-btn"
+                  onClick={() => handleViewTeams(product.name)}
+                >
+                  View Teams
+                </button>
               </div>
             </div>
           ))}
@@ -81,6 +99,12 @@ const ProductGrid: React.FC = () => {
           </a>
         </div>
       </div>
+      
+      <TeamsModal 
+        isOpen={modalOpen}
+        onClose={closeModal}
+        playerName={selectedPlayer}
+      />
     </section>
   );
 };
