@@ -27,10 +27,10 @@ const Header: React.FC = () => {
 
         <nav className={`header-nav ${menuOpen ? 'active' : ''}`}>
           <ul className="nav-list">
-            <li><a href="#home">LEADERBOARD</a></li>
-            <li><a href="#new">DRAFT</a></li>
-            <li><a href="#products">PLAYOFFS</a></li>
-            <li><a href="#merch">EXTRA</a></li>
+            <li><a href="#home">HOME</a></li>
+            <li><a href="#new">LEADERBOARD</a></li>
+            <li><a href="#products">DRAFT</a></li>
+            <li><a href="#merch">PLAYOFFS</a></li>
             {/* <li><a href="#featured">FEATURED</a></li>
             <li><a href="#about">ABOUT</a></li>
             <li><a href="#contact">CONTACT</a></li> */}
