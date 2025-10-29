@@ -1,110 +1,162 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ProductGrid.css';
-import TeamsModal from './TeamsModal';
 
-interface Product {
+interface Team {
   id: number;
   name: string;
   wins: number;
-  image: string;
-  category: string;
+  losses: number;
+}
+
+interface Player {
+  id: number;
+  name: string;
+  points: number;
+  teams: Team[];
 }
 
 const ProductGrid: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState('');
-  const products: Product[] = [
+  const players: Player[] = [
     {
       id: 1,
       name: 'Mark - The Commissioner',
-      wins: 12,
-      image: '🏈',
-      category: 'Apparel'
+      points: 24.5,
+      teams: [
+        { id: 1, name: 'Buffalo Bills', wins: 10, losses: 1 },
+        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
+        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
+        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
+        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
+        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
+        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+      ]
     },
     {
       id: 2,
-      name: 'Jerald',
-      wins: 8,
-      image: '💍',
-      category: 'Collectibles'
+      name: 'Jerald - The Head Coach',
+      points: 18.2,
+      teams: [
+        { id: 1, name: 'Buffalo Bills', wins: 15, losses: 1 },
+        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
+        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
+        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
+        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
+        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
+        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+      ]
     },
     {
       id: 3,
-      name: 'David',
-      wins: 15,
-      image: '🧢',
-      category: 'Accessories'
+      name: 'David - The Mascot "Go Beavs"',
+      points: 15.8,
+      teams: [
+        { id: 1, name: 'Buffalo Bills', wins: 8, losses: 1 },
+        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
+        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
+        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
+        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
+        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
+        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+      ]
     },
     {
       id: 4,
-      name: 'Rich',
-      wins: 6,
-      image: '🏈',
-      category: 'Collectibles'
+      name: 'Rich - The MVP',
+      points: 12.3,
+      teams: [
+        { id: 1, name: 'Buffalo Bills', wins: 7, losses: 1 },
+        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
+        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
+        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
+        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
+        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
+        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+      ]
     },
     {
       id: 5,
-      name: 'Eric',
-      wins: 10,
-      image: '👕',
-      category: 'Apparel'
+      name: 'Eric - The Half Time Show',
+      points: 16.7,
+      teams: [
+        { id: 1, name: 'Buffalo Bills', wins: 65, losses: 1 },
+        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
+        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
+        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
+        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
+        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
+        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+      ]
     },
   ];
 
-  const handleViewTeams = (playerName: string) => {
-    setSelectedPlayer(playerName);
-    setModalOpen(true);
+  const calculateRecord = (teams: Team[]) => {
+    const totalWins = teams.reduce((sum, team) => sum + team.wins, 0);
+    const totalLosses = teams.reduce((sum, team) => sum + team.losses, 0);
+    return `${totalWins}-${totalLosses}`;
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
-    setSelectedPlayer('');
-  };
+  const sortedPlayers = [...players].sort((a, b) => {
+    const aTotalWins = a.teams.reduce((sum, team) => sum + team.wins, 0);
+    const aTotalLosses = a.teams.reduce((sum, team) => sum + team.losses, 0);
+    const bTotalWins = b.teams.reduce((sum, team) => sum + team.wins, 0);
+    const bTotalLosses = b.teams.reduce((sum, team) => sum + team.losses, 0);
+
+    // Sort by wins (descending)
+    if (bTotalWins !== aTotalWins) {
+      return bTotalWins - aTotalWins;
+    }
+    // If wins are equal, sort by losses (ascending - fewer losses first)
+    return aTotalLosses - bTotalLosses;
+  });
 
   return (
     <section className="product-section" id="products">
       <div className="product-container">
         <div className="section-header">
           <h2>Roster</h2>
-          <p>Take a Look at What Teams Each Player Has</p>
+          <p>Current Active Players</p>
         </div>
 
         <div className="product-grid">
-          {products.map((product) => (
-            <div key={product.id} className="product-card">
-              <div className="product-image">
-                <span className="product-icon">{product.image}</span>
-                <div className="product-overlay">
-                  <button className="quick-view-btn">Quick View</button>
+          {sortedPlayers.map((player, index) => (
+            <div key={player.id} className="product-card">
+              <div className="player-header">
+                <h4 className="player-name">{player.name}</h4>
+              </div>
+              <div className="player-info">
+                <div className="player-points">
+                  <span className="points-label">Rank</span>
+                  <span className="points-value">#{index + 1}</span>
+                </div>
+                <div className="player-record">
+                  <span className="record-label">Record</span>
+                  <span className="record-value">{calculateRecord(player.teams)}</span>
                 </div>
               </div>
-              <div className="product-info">
-                <span className="product-category">{product.category}</span>
-                <h3 className="product-name">{product.name}</h3>
-                <p className="product-price">{product.wins} Wins</p>
-                <button 
-                  className="add-to-cart-btn"
-                  onClick={() => handleViewTeams(product.name)}
-                >
-                  View Teams
-                </button>
+              <div className="teams-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>W</th>
+                      <th>L</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {player.teams.map((team) => (
+                      <tr key={team.id}>
+                        <td>{team.name}</td>
+                        <td>{team.wins}</td>
+                        <td>{team.losses}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           ))}
         </div>
-
-        <div className="view-all-container">
-          <a href="#all-products" className="view-all-btn">
-            View All Products
-          </a>
-        </div>
       </div>
-      
-      <TeamsModal 
-        isOpen={modalOpen}
-        onClose={closeModal}
-        playerName={selectedPlayer}
-      />
     </section>
   );
 };
