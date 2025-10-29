@@ -128,3 +128,5 @@ const TeamsModal: React.FC<TeamsModalProps> = ({ isOpen, onClose, playerName }) 
 };
 
 export default TeamsModal;
+
+
