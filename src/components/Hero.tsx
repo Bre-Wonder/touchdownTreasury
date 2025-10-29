@@ -5,8 +5,7 @@ interface Slide {
   id: number;
   title: string;
   subtitle: string;
-  buttonText: string;
-  buttonLink: string;
+  image: string;
 }
 
 const Hero: React.FC = () => {
@@ -17,22 +16,19 @@ const Hero: React.FC = () => {
       id: 1,
       title: 'Touchdown Treasury',
       subtitle: 'Your Ultimate Football Memorabilia Collection',
-      buttonText: 'Shop Now',
-      buttonLink: '#products'
+      image: '/images/image1.jpg'
     },
     {
       id: 2,
-      title: 'New Arrivals',
-      subtitle: 'Exclusive Limited Edition Items',
-      buttonText: 'Explore',
-      buttonLink: '#new'
+      title: 'Game Day Action',
+      subtitle: 'Experience the Thrill of the Game',
+      image: '/images/image2.jpg'
     },
     {
       id: 3,
-      title: 'Premium Merch',
-      subtitle: 'Show Your Team Spirit',
-      buttonText: 'View Collection',
-      buttonLink: '#merch'
+      title: 'Stadium Experience',
+      subtitle: 'Be Part of Football History',
+      image: '/images/image3.jpg'
     }
   ];
 
@@ -55,13 +51,12 @@ const Hero: React.FC = () => {
           <div
             key={slide.id}
             className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${slide.image})` }}
           >
+            <div className="hero-overlay"></div>
             <div className="hero-content">
               <h1 className="hero-title">{slide.title}</h1>
               <p className="hero-subtitle">{slide.subtitle}</p>
-              <a href={slide.buttonLink} className="hero-button">
-                {slide.buttonText}
-              </a>
             </div>
           </div>
         ))}
