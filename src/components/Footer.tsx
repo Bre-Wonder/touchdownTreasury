@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
         <div className="footer-content">
           <h3>Touchdown Treasury</h3>
           <p className="footer-description">
-            Your premier destination for football pools, playoffs, and drafts done right. Because someone had to fix what your buddy’s spreadsheet ruined. Keeping the game spirit alive since 2025.
+            Your premier destination for football pools, playoffs, and drafts done right. Because someone had to fix what your relative’s spreadsheet ruined. Keeping the game spirit alive since 2025.
           </p>
         </div>
 
