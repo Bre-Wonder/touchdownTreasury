@@ -1,112 +1,158 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProductGrid.css';
+import { computeTeamRecords, fetchSeasonEvents, normalizeTeamNameForMatching } from '../services/nflApi';
 
 interface Team {
   id: number;
   name: string;
   wins: number;
   losses: number;
+  ties: number;
 }
 
 interface Player {
   id: number;
   name: string;
-  points: number;
   teams: Team[];
 }
 
 const ProductGrid: React.FC = () => {
-  const players: Player[] = [
+  const [, setSeasonRecordsLoaded] = useState(false);
+  const getTeamImageSrc = (teamName: string) => {
+    const parts = teamName.trim().split(' ');
+    const nickname = parts[parts.length - 1].toLowerCase();
+    return `/images/${nickname}.png`;
+  };
+
+  const [players, setPlayers] = useState<Player[]>([
     {
       id: 1,
       name: 'Mark - The Commissioner',
-      points: 24.5,
       teams: [
-        { id: 1, name: 'Buffalo Bills', wins: 10, losses: 1 },
-        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
-        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
-        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
-        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
-        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
-        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+        { id: 1, name: 'Bills', wins: 5, losses: 5, ties: 0},
+        { id: 2, name: 'Lions', wins: 5, losses: 2, ties: 0 },
+        { id: 3, name: 'Chargers', wins: 5, losses: 3, ties: 0 },
+        { id: 4, name: 'Bengals', wins: 3, losses: 5, ties: 0 },
+        { id: 5, name: 'Cowboys', wins: 3, losses: 4, ties: 1 },
+        { id: 6, name: 'Panthers', wins: 4, losses: 4, ties: 0 },
+        { id: 7, name: '', wins: 0, losses: 0, ties: 0 }
       ]
     },
     {
       id: 2,
       name: 'Jerald - The Head Coach',
-      points: 18.2,
       teams: [
-        { id: 1, name: 'Buffalo Bills', wins: 15, losses: 1 },
-        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
-        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
-        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
-        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
-        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
-        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+        { id: 1, name: 'Packers', wins: 5, losses: 1, ties: 1},
+        { id: 2, name: 'Commanders', wins: 3, losses: 5, ties: 0 },
+        { id: 3, name: 'Steelers', wins: 4, losses: 3, ties: 0 },
+        { id: 4, name: 'Seahawks', wins: 5, losses: 2, ties: 0 },
+        { id: 5, name: 'Colts', wins: 7, losses: 1, ties: 0 },
+        { id: 6, name: 'Saints', wins: 1, losses: 7, ties: 0 },
+        { id: 7, name: 'Jets', wins: 1, losses: 7, ties: 0 },
       ]
     },
     {
       id: 3,
-      name: 'David - The Mascot "Go Beavs"',
-      points: 15.8,
+      name: 'David - The Mascot',
       teams: [
-        { id: 1, name: 'Buffalo Bills', wins: 8, losses: 1 },
-        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
-        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
-        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
-        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
-        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
-        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+        { id: 1, name: 'Chiefs', wins: 5, losses: 3, ties: 0 },
+        { id: 2, name: 'Rams', wins: 5, losses: 2, ties: 0 },
+        { id: 3, name: 'Texans', wins: 3, losses: 4, ties: 0 },
+        { id: 4, name: 'Vikings', wins: 3, losses: 4, ties: 0 },
+        { id: 5, name: 'Cardinals', wins: 2, losses: 5, ties: 0 },
+        { id: 6, name: 'Dolphins', wins: 2, losses: 6, ties: 0 },
+        { id: 7, name: '', wins: 0, losses: 0, ties: 0 }
       ]
     },
     {
       id: 4,
-      name: 'Rich - The MVP',
-      points: 12.3,
+      name: 'Rich -\nThe MVP',
       teams: [
-        { id: 1, name: 'Buffalo Bills', wins: 7, losses: 1 },
-        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
-        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
-        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
-        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
-        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
-        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+        { id: 1, name: 'Ravens', wins: 2, losses: 5, ties: 0 },
+        { id: 2, name: 'Buccaneers', wins: 6, losses: 2, ties: 0 },
+        { id: 3, name: 'Patriots', wins: 6, losses: 2, ties: 0 },
+        { id: 4, name: 'Jaguars', wins: 4, losses: 3, ties: 0 },
+        { id: 5, name: 'Bears', wins: 4, losses: 3, ties: 0 },
+        { id: 6, name: 'Giants', wins: 2, losses: 6, ties: 0 },
+        { id: 7, name: '', wins: 0, losses: 0, ties: 0 }
       ]
     },
     {
       id: 5,
       name: 'Eric - The Half Time Show',
-      points: 16.7,
       teams: [
-        { id: 1, name: 'Buffalo Bills', wins: 65, losses: 1 },
-        { id: 2, name: 'Kansas City Chiefs', wins: 4, losses: 0 },
-        { id: 3, name: 'Tampa Bay Buccaneers', wins: 2, losses: 2 },
-        { id: 4, name: 'Green Bay Packers', wins: 3, losses: 1 },
-        { id: 5, name: 'Los Angeles Rams', wins: 4, losses: 0 },
-        { id: 6, name: 'Dallas Cowboys', wins: 2, losses: 2 },
-        { id: 7, name: 'San Francisco 49ers', wins: 3, losses: 1 }
+        { id: 1, name: 'Eagles', wins: 6, losses: 2, ties: 0 },
+        { id: 2, name: '49ers', wins: 5, losses: 3, ties: 0 },
+        { id: 3, name: 'Broncos', wins: 6, losses: 2, ties: 0 },
+        { id: 4, name: 'Falcons', wins: 3, losses: 4, ties: 0 },
+        { id: 5, name: 'Raiders', wins: 2, losses: 5, ties: 0 },
+        { id: 6, name: 'Titans', wins: 1, losses: 7, ties: 0 },
+        { id: 7, name: 'Browns', wins: 2, losses: 6, ties: 0 }
       ]
     },
-  ];
+  ]);
 
-  const calculateRecord = (teams: Team[]) => {
-    const totalWins = teams.reduce((sum, team) => sum + team.wins, 0);
-    const totalLosses = teams.reduce((sum, team) => sum + team.losses, 0);
-    return `${totalWins}-${totalLosses}`;
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        // Example: current season. Adjust year string as needed.
+        const events = await fetchSeasonEvents('2024');
+        const records = computeTeamRecords(events);
+
+        if (cancelled) return;
+
+        setPlayers((prev) =>
+          prev.map((p) => ({
+            ...p,
+            teams: p.teams.map((t) => {
+              const matchKey = normalizeTeamNameForMatching(t.name);
+              const rec = records[matchKey];
+              if (!rec || !t.name.trim()) {
+                return t; // keep existing if no record or empty name
+              }
+              return { ...t, wins: rec.wins, losses: rec.losses, ties: rec.ties };
+            }),
+          }))
+        );
+        setSeasonRecordsLoaded(true);
+      } catch (e) {
+        // Fail silently; keep manual data
+        setSeasonRecordsLoaded(true);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const calculateTotalWins = (teams: Team[]) => {
+    return teams.reduce((sum, team) => sum + team.wins, 0);
+  };
+
+  const calculateTotalPoints = (teams: Team[]) => {
+    return teams.reduce((sum, team) => sum + team.wins + team.ties * 0.5, 0);
   };
 
   const sortedPlayers = [...players].sort((a, b) => {
-    const aTotalWins = a.teams.reduce((sum, team) => sum + team.wins, 0);
-    const aTotalLosses = a.teams.reduce((sum, team) => sum + team.losses, 0);
-    const bTotalWins = b.teams.reduce((sum, team) => sum + team.wins, 0);
-    const bTotalLosses = b.teams.reduce((sum, team) => sum + team.losses, 0);
+    const aPoints = calculateTotalPoints(a.teams);
+    const bPoints = calculateTotalPoints(b.teams);
 
-    // Sort by wins (descending)
-    if (bTotalWins !== aTotalWins) {
-      return bTotalWins - aTotalWins;
+    if (bPoints !== aPoints) {
+      return bPoints - aPoints; // higher points first
     }
-    // If wins are equal, sort by losses (ascending - fewer losses first)
-    return aTotalLosses - bTotalLosses;
+
+    // Tie-breakers: more wins, then fewer losses
+    const aWins = calculateTotalWins(a.teams);
+    const bWins = calculateTotalWins(b.teams);
+    if (bWins !== aWins) {
+      return bWins - aWins;
+    }
+
+    const aLosses = a.teams.reduce((sum, team) => sum + team.losses, 0);
+    const bLosses = b.teams.reduce((sum, team) => sum + team.losses, 0);
+    return aLosses - bLosses;
   });
 
   return (
@@ -129,8 +175,15 @@ const ProductGrid: React.FC = () => {
                   <span className="points-value">#{index + 1}</span>
                 </div>
                 <div className="player-record">
-                  <span className="record-label">Record</span>
-                  <span className="record-value">{calculateRecord(player.teams)}</span>
+                  <span className="record-label">Wins</span>
+                  <span className="record-value">{calculateTotalWins(player.teams)}</span>
+                </div>
+                <div className="player-points">
+                  <span className="points-label">Points</span>
+                  <span className="points-value">{(() => {
+                    const pts = calculateTotalPoints(player.teams);
+                    return pts % 1 === 0 ? pts : pts.toFixed(1);
+                  })()}</span>
                 </div>
               </div>
               <div className="teams-table">
@@ -140,14 +193,29 @@ const ProductGrid: React.FC = () => {
                       <th>Team</th>
                       <th>W</th>
                       <th>L</th>
+                      <th>T</th>
                     </tr>
                   </thead>
                   <tbody>
                     {player.teams.map((team) => (
                       <tr key={team.id}>
-                        <td>{team.name}</td>
+                        <td className="team-name-cell">
+                          {team.name.trim() ? (
+                            <>
+                              <img
+                                className="team-logo"
+                                src={getTeamImageSrc(team.name)}
+                                alt={`${team.name} logo`}
+                              />
+                              <span className="team-name-text">{team.name}</span>
+                            </>
+                          ) : (
+                            <span className="team-name-text">{team.name}</span>
+                          )}
+                        </td>
                         <td>{team.wins}</td>
                         <td>{team.losses}</td>
+                        <td>{team.ties}</td>
                       </tr>
                     ))}
                   </tbody>
