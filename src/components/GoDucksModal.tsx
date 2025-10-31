@@ -14,7 +14,7 @@ const GoDucksModal: React.FC<GoDucksModalProps> = ({ isOpen, onAgree }) => {
       <div className="go-ducks-modal">
         <div className="go-ducks-modal-content">
           <img 
-            src="/images/ducks.png" 
+            src={`${import.meta.env.BASE_URL}images/ducks.png`}
             alt="Ducks" 
             className="go-ducks-image"
           />

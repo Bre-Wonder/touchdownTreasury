@@ -22,7 +22,7 @@ const ProductGrid: React.FC = () => {
   const getTeamImageSrc = (teamName: string) => {
     const parts = teamName.trim().split(' ');
     const nickname = parts[parts.length - 1].toLowerCase();
-    return `/images/${nickname}.png`;
+    return `${import.meta.env.BASE_URL}images/${nickname}.png`;
   };
 
   const [players, setPlayers] = useState<Player[]>([

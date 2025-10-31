@@ -16,19 +16,19 @@ const Hero: React.FC = () => {
       id: 1,
       title: 'Welcome to the Stadium',
       subtitle: 'Experience the Thrill of the Steward Family Game',
-      image: '/images/image1.jpg'
+      image: `${import.meta.env.BASE_URL}images/image1.jpg`
     },
     {
       id: 2,
       title: 'Welcome to the Stadium',
       subtitle: 'Experience the Thrill of the Steward Family Game',
-      image: '/images/image2.jpg'
+      image: `${import.meta.env.BASE_URL}images/image2.jpg`
     },
     {
       id: 3,
       title: 'Welcome to the Stadium',
       subtitle: 'Experience the Thrill of the Steward Family Game',
-      image: '/images/image3.jpg'
+      image: `${import.meta.env.BASE_URL}images/image3.jpg`
     }
   ];
 
