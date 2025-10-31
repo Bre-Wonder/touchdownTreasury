@@ -18,6 +18,7 @@ interface Player {
 
 const ProductGrid: React.FC = () => {
   const [, setSeasonRecordsLoaded] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const getTeamImageSrc = (teamName: string) => {
     const parts = teamName.trim().split(' ');
     const nickname = parts[parts.length - 1].toLowerCase();
@@ -66,7 +67,7 @@ const ProductGrid: React.FC = () => {
     },
     {
       id: 4,
-      name: 'Rich -\nThe MVP',
+      name: 'Rich -  The Referee',
       teams: [
         { id: 1, name: 'Ravens', wins: 2, losses: 5, ties: 0 },
         { id: 2, name: 'Buccaneers', wins: 6, losses: 2, ties: 0 },
@@ -92,12 +93,41 @@ const ProductGrid: React.FC = () => {
     },
   ]);
 
+  const refreshScores = async () => {
+    setIsRefreshing(true);
+    try {
+      // Fetch events for the 2025-2026 NFL season
+      const events = await fetchSeasonEvents('2025');
+      const records = computeTeamRecords(events);
+
+      setPlayers((prev) =>
+        prev.map((p) => ({
+          ...p,
+          teams: p.teams.map((t) => {
+            const matchKey = normalizeTeamNameForMatching(t.name);
+            const rec = records[matchKey];
+            if (!rec || !t.name.trim()) {
+              return t; // keep existing if no record or empty name
+            }
+            return { ...t, wins: rec.wins, losses: rec.losses, ties: rec.ties };
+          }),
+        }))
+      );
+      setSeasonRecordsLoaded(true);
+    } catch (e) {
+      // Fail silently; keep manual data
+      setSeasonRecordsLoaded(true);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
       try {
-        // Example: current season. Adjust year string as needed.
-        const events = await fetchSeasonEvents('2024');
+        // Fetch events for the 2025-2026 NFL season
+        const events = await fetchSeasonEvents('2025');
         const records = computeTeamRecords(events);
 
         if (cancelled) return;
@@ -128,11 +158,15 @@ const ProductGrid: React.FC = () => {
   }, []);
 
   const calculateTotalWins = (teams: Team[]) => {
-    return teams.reduce((sum, team) => sum + team.wins, 0);
+    return teams
+      .filter(team => team.id !== 7)
+      .reduce((sum, team) => sum + team.wins, 0);
   };
 
   const calculateTotalPoints = (teams: Team[]) => {
-    return teams.reduce((sum, team) => sum + team.wins + team.ties * 0.5, 0);
+    return teams
+      .filter(team => team.id !== 7)
+      .reduce((sum, team) => sum + team.wins + team.ties * 0.5, 0);
   };
 
   const sortedPlayers = [...players].sort((a, b) => {
@@ -150,8 +184,12 @@ const ProductGrid: React.FC = () => {
       return bWins - aWins;
     }
 
-    const aLosses = a.teams.reduce((sum, team) => sum + team.losses, 0);
-    const bLosses = b.teams.reduce((sum, team) => sum + team.losses, 0);
+    const aLosses = a.teams
+      .filter(team => team.id !== 7)
+      .reduce((sum, team) => sum + team.losses, 0);
+    const bLosses = b.teams
+      .filter(team => team.id !== 7)
+      .reduce((sum, team) => sum + team.losses, 0);
     return aLosses - bLosses;
   });
 
@@ -223,6 +261,15 @@ const ProductGrid: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="refresh-scores-container">
+          <button
+            className="refresh-scores-btn"
+            onClick={refreshScores}
+            disabled={isRefreshing}
+          >
+            {isRefreshing ? 'Refreshing...' : 'Refresh Scores'}
+          </button>
         </div>
       </div>
     </section>
