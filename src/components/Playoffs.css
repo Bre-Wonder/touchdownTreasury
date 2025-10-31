@@ -1,8 +1,8 @@
 .playoffs-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: #ffffff;
-  padding: 2rem 0;
+  background-color: var(--color-light);
+  color: var(--color-dark-red);
+  padding: 5rem 2rem;
 }
 
 .playoffs-container {
@@ -19,14 +19,13 @@
 .playoffs-header h1 {
   font-size: 3rem;
   font-weight: bold;
-  color: #ff6b35;
+  color: var(--color-dark-red);
   margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .playoffs-header p {
   font-size: 1.2rem;
-  color: #cccccc;
+  color: var(--color-blue);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -38,9 +37,10 @@
 
 .playoffs-section h2 {
   font-size: 2rem;
-  color: #ff6b35;
+  color: var(--color-dark-red);
   margin-bottom: 1.5rem;
   text-align: center;
+  font-weight: 700;
 }
 
 .bracket-container {
@@ -51,29 +51,41 @@
 }
 
 .bracket-round {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 107, 53, 0.3);
+  background-color: var(--color-blue);
+  border: 3px solid var(--color-bright-red);
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bracket-round:hover {
+  background-color: var(--color-dark-red);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(217, 43, 43, 0.5);
 }
 
 .bracket-round.championship {
-  border-color: #ff6b35;
-  background: rgba(255, 107, 53, 0.1);
+  border-color: var(--color-bright-red);
+  background-color: var(--color-blue);
+}
+
+.bracket-round.championship:hover {
+  background-color: var(--color-dark-red);
 }
 
 .bracket-round h3 {
-  color: #ff6b35;
+  color: #ffffff;
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+  border-bottom: 2px solid var(--color-bright-red);
   padding-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .matchup {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 107, 53, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -82,17 +94,21 @@
   align-items: center;
 }
 
+.matchup:hover {
+  background-color: rgba(217, 43, 43, 0.2);
+}
+
 .matchup:last-child {
   margin-bottom: 0;
 }
 
 .team {
   color: #ffffff;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .score {
-  color: #ff6b35;
+  color: #ffffff;
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -105,32 +121,33 @@
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid #ff6b35;
+  background-color: var(--color-blue);
+  border: 3px solid var(--color-bright-red);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+  background-color: var(--color-dark-red);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(217, 43, 43, 0.5);
 }
 
 .stat-card h4 {
-  color: #cccccc;
+  color: #ffffff;
   font-size: 1rem;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 700;
 }
 
 .stat-number {
-  color: #ff6b35;
+  color: #ffffff;
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 800;
 }
 
 .rules-list {
@@ -140,21 +157,29 @@
 }
 
 .rule-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 107, 53, 0.3);
-  border-radius: 8px;
+  background-color: var(--color-blue);
+  border: 3px solid var(--color-bright-red);
+  border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.rule-item:hover {
+  background-color: var(--color-dark-red);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(217, 43, 43, 0.5);
 }
 
 .rule-item h4 {
-  color: #ff6b35;
+  color: #ffffff;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .rule-item p {
-  color: #cccccc;
+  color: #ffffff;
   line-height: 1.5;
 }
 
