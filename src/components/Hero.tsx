@@ -14,20 +14,20 @@ const Hero: React.FC = () => {
   const slides: Slide[] = [
     {
       id: 1,
-      title: 'Touchdown Treasury',
-      subtitle: 'Your Ultimate Football Memorabilia Collection',
+      title: 'Welcome to the Stadium',
+      subtitle: 'Experience the Thrill of the Steward Family Game',
       image: '/images/image1.jpg'
     },
     {
       id: 2,
-      title: 'Game Day Action',
-      subtitle: 'Experience the Thrill of the Game',
+      title: 'Welcome to the Stadium',
+      subtitle: 'Experience the Thrill of the Steward Family Game',
       image: '/images/image2.jpg'
     },
     {
       id: 3,
-      title: 'Stadium Experience',
-      subtitle: 'Be Part of Football History',
+      title: 'Welcome to the Stadium',
+      subtitle: 'Experience the Thrill of the Steward Family Game',
       image: '/images/image3.jpg'
     }
   ];
