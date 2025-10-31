@@ -1,7 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Playoffs.css';
 
 const Playoffs: React.FC = () => {
+  const [daysRemaining, setDaysRemaining] = useState<number>(0);
+
+  useEffect(() => {
+    const calculateDaysRemaining = () => {
+      const targetDate = new Date('2026-02-08');
+      targetDate.setHours(0, 0, 0, 0); // Set to start of day
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to start of day
+      
+      const timeDifference = targetDate.getTime() - today.getTime();
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      
+      // If the date has passed, show 0 days
+      setDaysRemaining(Math.max(0, days));
+    };
+
+    // Calculate on mount
+    calculateDaysRemaining();
+
+    // Update daily at midnight
+    const now = new Date();
+    const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+    
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    
+    const timeoutId = setTimeout(() => {
+      calculateDaysRemaining();
+      // Then update every 24 hours
+      intervalId = setInterval(calculateDaysRemaining, 24 * 60 * 60 * 1000);
+    }, msUntilMidnight);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, []);
+
   return (
     <div className="playoffs-page">
       <div className="playoffs-container">
@@ -32,16 +72,32 @@ const Playoffs: React.FC = () => {
                   <div className="team">Team Golf vs Team Hotel</div>
                   <div className="score">28 - 15</div>
                 </div>
+                <div className="matchup">
+                  <div className="team">Team India vs Team Juliet</div>
+                  <div className="score">TBD</div>
+                </div>
+                <div className="matchup">
+                  <div className="team">Team Kilo vs Team Lima</div>
+                  <div className="score">TBD</div>
+                </div>
               </div>
               
               <div className="bracket-round">
                 <h3>Divisional Round</h3>
                 <div className="matchup">
-                  <div className="team">Team Alpha vs Team Delta</div>
+                  <div className="team">Winner vs Winner</div>
                   <div className="score">TBD</div>
                 </div>
                 <div className="matchup">
-                  <div className="team">Team Foxtrot vs Team Golf</div>
+                  <div className="team">Winner vs Winner</div>
+                  <div className="score">TBD</div>
+                </div>
+                <div className="matchup">
+                  <div className="team">Winner vs Winner</div>
+                  <div className="score">TBD</div>
+                </div>
+                <div className="matchup">
+                  <div className="team">Winner vs Winner</div>
                   <div className="score">TBD</div>
                 </div>
               </div>
@@ -52,10 +108,14 @@ const Playoffs: React.FC = () => {
                   <div className="team">Winner vs Winner</div>
                   <div className="score">TBD</div>
                 </div>
+                <div className="matchup">
+                  <div className="team">Winner vs Winner</div>
+                  <div className="score">TBD</div>
+                </div>
               </div>
               
               <div className="bracket-round championship">
-                <h3>Championship Game</h3>
+                <h3>Super Bowl</h3>
                 <div className="matchup">
                   <div className="team">Final Winner</div>
                   <div className="score">TBD</div>
@@ -69,11 +129,11 @@ const Playoffs: React.FC = () => {
             <div className="stats-grid">
               <div className="stat-card">
                 <h4>Total Participants</h4>
-                <div className="stat-number">256</div>
+                <div className="stat-number">5</div>
               </div>
               <div className="stat-card">
                 <h4>Prize Pool</h4>
-                <div className="stat-number">$12,800</div>
+                <div className="stat-number">$100</div>
               </div>
               <div className="stat-card">
                 <h4>Current Round</h4>
@@ -81,29 +141,7 @@ const Playoffs: React.FC = () => {
               </div>
               <div className="stat-card">
                 <h4>Days Remaining</h4>
-                <div className="stat-number">14</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="playoffs-section">
-            <h2>Playoff Rules</h2>
-            <div className="rules-list">
-              <div className="rule-item">
-                <h4>Single Elimination</h4>
-                <p>One loss and you're out. Make every pick count!</p>
-              </div>
-              <div className="rule-item">
-                <h4>Weekly Matchups</h4>
-                <p>Each round lasts one week of NFL games</p>
-              </div>
-              <div className="rule-item">
-                <h4>Higher Seed Advantage</h4>
-                <p>Higher seeded teams get home field advantage (tiebreaker)</p>
-              </div>
-              <div className="rule-item">
-                <h4>Prize Distribution</h4>
-                <p>Winner takes 70%, Runner-up gets 20%, Semifinalists split 10%</p>
+                <div className="stat-number">{daysRemaining}</div>
               </div>
             </div>
           </div>
