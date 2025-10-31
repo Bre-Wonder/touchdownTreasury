@@ -16,7 +16,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <Router>
+    <Router basename="/touchdownTreasury">
       <div className="app">
         <GoDucksModal isOpen={showGoDucksModal} onAgree={handleAgree} />
         <Header />
