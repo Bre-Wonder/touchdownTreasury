@@ -81,25 +81,53 @@ export function computeTeamRecords(events: NflEvent[]): Record<string, TeamRecor
 
 export function normalizeTeamNameForMatching(name: string): string {
   // Convert common variations to TheSportsDB team names
-  // Example: 'San Francisco 49ers' => 'San Francisco 49ers', '49ers' => 'San Francisco 49ers'
+  // TheSportsDB uses full team names like "Buffalo Bills", "Detroit Lions", etc.
   const n = name.trim();
   if (!n) return n;
   const lower = n.toLowerCase();
 
   const aliases: Record<string, string> = {
-    '49ers': 'San Francisco 49ers',
-    'bucs': 'Tampa Bay Buccaneers',
+    // NFC Teams
+    'bills': 'Buffalo Bills',
+    'lions': 'Detroit Lions',
+    'packers': 'Green Bay Packers',
+    'commanders': 'Washington Commanders',
+    'steelers': 'Pittsburgh Steelers',
+    'seahawks': 'Seattle Seahawks',
+    'colts': 'Indianapolis Colts',
+    'saints': 'New Orleans Saints',
+    'jets': 'New York Jets',
+    'rams': 'Los Angeles Rams',
+    'cardinals': 'Arizona Cardinals',
+    'dolphins': 'Miami Dolphins',
+    'vikings': 'Minnesota Vikings',
+    'ravens': 'Baltimore Ravens',
     'buccaneers': 'Tampa Bay Buccaneers',
+    'bucs': 'Tampa Bay Buccaneers',
+    'patriots': 'New England Patriots',
     'pats': 'New England Patriots',
+    'jaguars': 'Jacksonville Jaguars',
+    'bears': 'Chicago Bears',
+    'giants': 'New York Giants',
+    'eagles': 'Philadelphia Eagles',
+    '49ers': 'San Francisco 49ers',
+    'broncos': 'Denver Broncos',
+    'falcons': 'Atlanta Falcons',
+    'raiders': 'Las Vegas Raiders',
+    'titans': 'Tennessee Titans',
+    'browns': 'Cleveland Browns',
     'chiefs': 'Kansas City Chiefs',
     'cheifs': 'Kansas City Chiefs',
-    'rams': 'Los Angeles Rams',
     'chargers': 'Los Angeles Chargers',
-    'raiders': 'Las Vegas Raiders',
+    'cowboys': 'Dallas Cowboys',
+    'panthers': 'Carolina Panthers',
+    'bengals': 'Cincinnati Bengals',
+    'texans': 'Houston Texans',
     'washington': 'Washington Commanders',
   };
 
   if (aliases[lower]) return aliases[lower];
+  // If no alias found, return as-is (might already be correct format)
   return n;
 }
 
