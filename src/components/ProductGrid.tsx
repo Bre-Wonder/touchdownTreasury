@@ -44,7 +44,7 @@ const ProductGrid: React.FC = () => {
       name: 'Jerald - The Head Coach',
       teams: [
         { id: 1, name: 'Packers', wins: 5, losses: 1, ties: 1},
-        { id: 2, name: 'Commanders', wins: 3, losses: 5, ties: 0 },
+        { id: 2, name: 'Manders', wins: 3, losses: 5, ties: 0 },
         { id: 3, name: 'Steelers', wins: 4, losses: 3, ties: 0 },
         { id: 4, name: 'Seahawks', wins: 5, losses: 2, ties: 0 },
         { id: 5, name: 'Colts', wins: 7, losses: 1, ties: 0 },
