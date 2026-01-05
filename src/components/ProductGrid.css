@@ -35,7 +35,7 @@
 .product-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
+  gap: 1rem;
   margin-bottom: 3rem;
   justify-items: stretch;
   width: 100%;
@@ -241,13 +241,6 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-}
-
-@media (max-width: 1600px) {
-  .product-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
 }
 
 @media (max-width: 1400px) {
