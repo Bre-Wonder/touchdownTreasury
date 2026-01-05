@@ -98,7 +98,10 @@ const ProductGrid: React.FC = () => {
     try {
       // Fetch events for the 2025-2026 NFL season
       const events = await fetchSeasonEvents('2025');
+      console.log('Fetched events:', events.length, events);
+      
       const records = computeTeamRecords(events);
+      console.log('Computed records:', records);
 
       setPlayers((prev) =>
         prev.map((p) => ({
@@ -107,6 +110,9 @@ const ProductGrid: React.FC = () => {
             const matchKey = normalizeTeamNameForMatching(t.name);
             const rec = records[matchKey];
             if (!rec || !t.name.trim()) {
+              if (t.name.trim() && !rec) {
+                console.log(`No record found for team: "${t.name}" (normalized: "${matchKey}")`);
+              }
               return t; // keep existing if no record or empty name
             }
             return { ...t, wins: rec.wins, losses: rec.losses, ties: rec.ties };
@@ -115,6 +121,7 @@ const ProductGrid: React.FC = () => {
       );
       setSeasonRecordsLoaded(true);
     } catch (e) {
+      console.error('Error fetching season events:', e);
       // Fail silently; keep manual data
       setSeasonRecordsLoaded(true);
     } finally {
@@ -128,7 +135,10 @@ const ProductGrid: React.FC = () => {
       try {
         // Fetch events for the 2025-2026 NFL season
         const events = await fetchSeasonEvents('2025');
+        console.log('Initial load - Fetched events:', events.length, events);
+        
         const records = computeTeamRecords(events);
+        console.log('Initial load - Computed records:', records);
 
         if (cancelled) return;
 
@@ -139,6 +149,9 @@ const ProductGrid: React.FC = () => {
               const matchKey = normalizeTeamNameForMatching(t.name);
               const rec = records[matchKey];
               if (!rec || !t.name.trim()) {
+                if (t.name.trim() && !rec) {
+                  console.log(`Initial load - No record found for team: "${t.name}" (normalized: "${matchKey}")`);
+                }
                 return t; // keep existing if no record or empty name
               }
               return { ...t, wins: rec.wins, losses: rec.losses, ties: rec.ties };
@@ -147,6 +160,7 @@ const ProductGrid: React.FC = () => {
         );
         setSeasonRecordsLoaded(true);
       } catch (e) {
+        console.error('Initial load - Error fetching season events:', e);
         // Fail silently; keep manual data
         setSeasonRecordsLoaded(true);
       }
